@@ -1,47 +1,65 @@
+const searchInput = document.getElementById("searchInput");
+const findBtn = document.getElementById("findBtn");
 
-const searchInput=document.getElementById('searchInput');
-const findBtn=document.getElementById('findBtn')
+findBtn.addEventListener("click", function () {
+  search(searchInput.value);
+});
 
-
-findBtn.addEventListener('click', function(){
-
-search(searchInput.value)
-    
-})
-
-searchInput.addEventListener('input',()=>{
-
-    search(searchInput.value)
-})
+searchInput.addEventListener("input", () => {
+  search(searchInput.value);
+});
 async function search(city) {
+  let response = await fetch(
+    `http://api.weatherapi.com/v1/forecast.json?key=e6f328a89a83405aaed84911241712&q=${city}&days=3`
+  );
+  if (response.status != 400 && response.ok) {
+    // console.log(response);
 
-   
-        let response=await fetch(`http://api.weatherapi.com/v1/forecast.json?key=e6f328a89a83405aaed84911241712&q=${city}&days=3`)
-        let final =await response.json()
-        console.log(final);
-        displayToday(final.current,final.location)
-        displayTomorrow(final.forecast.forecastday)
-        displayAfterTomorrow(final.forecast.forecastday) 
-    
-        
-    
-    
+    let final = await response.json();
+    console.log(final);
+
+    displayToday(final.current, final.location);
+    displayTomorrow(final.forecast.forecastday);
+    displayAfterTomorrow(final.forecast.forecastday);
+  }
 }
 
-search('cairo')
+search("cairo");
 
-const dayName=['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday','Saturday']
-const monthName=['January', 'February',' March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',' November',' December']
+const dayName = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+const monthName = [
+  "January",
+  "February",
+  " March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  " November",
+  " December",
+];
 
-
-function displayToday(current,location){
-const date= new Date(current.last_updated.split(' ',1).toString());
-const day =date.getDay()
-const month =date.getMonth()
-let todayWeather ='';
-todayWeather =`<div class="header d-flex justify-content-between">
+function displayToday(current, location) {
+  const date = new Date(current.last_updated.split(" ", 1).toString());
+  const day = date.getDay();
+  const month = date.getMonth();
+  let todayWeather = "";
+  todayWeather = `<div class="header d-flex justify-content-between">
                     <span class="day">${dayName[day]}</span>
-                    <span class="date">${ date.getDate()+monthName[month]}</span>
+                    <span class="date">${
+                      date.getDate() + monthName[month]
+                    }</span>
                 </div>
                 <div class="forecast-content p-4">
                     <span class="location ">${location.name}</span>
@@ -70,18 +88,15 @@ todayWeather =`<div class="header d-flex justify-content-between">
                     </span>
                 </div>
                 
-`
-document.getElementById('todayForecast').innerHTML=todayWeather;
-
+`;
+  document.getElementById("todayForecast").innerHTML = todayWeather;
 }
 
-function displayTomorrow(forecast){
-    const date= new Date(forecast[1].date);
-    const day =date.getDay()
-    
-    
-  
-    let tomorrowForecast=`<div class="header text-center bg-dark-header">
+function displayTomorrow(forecast) {
+  const date = new Date(forecast[1].date);
+  const day = date.getDay();
+
+  let tomorrowForecast = `<div class="header text-center bg-dark-header">
                 <span class="day">${dayName[day]}</span>
             </div>
             <div class="forecast-content text-center p-5 ">
@@ -100,19 +115,14 @@ function displayTomorrow(forecast){
                 <div class="weather text-primary py-4">
                     <span>${forecast[1].day.condition.text}</span>
                 </div>
-            </div>`
-            document.getElementById('tomorrow').innerHTML=tomorrowForecast;
-
-
-
+            </div>`;
+  document.getElementById("tomorrow").innerHTML = tomorrowForecast;
 }
-function displayAfterTomorrow(forecast){
-    const date= new Date(forecast[2].date);
-    const day =date.getDay()
-  
-    
-  
-    let afterTomorrowForecast=`<div class="header text-center bg-dark-header">
+function displayAfterTomorrow(forecast) {
+  const date = new Date(forecast[2].date);
+  const day = date.getDay();
+
+  let afterTomorrowForecast = `<div class="header text-center bg-dark-header">
                 <span class="day">${dayName[day]}</span>
             </div>
             <div class="forecast-content text-center p-5 ">
@@ -131,10 +141,6 @@ function displayAfterTomorrow(forecast){
                 <div class="weather text-primary py-4">
                     <span>${forecast[2].day.condition.text}</span>
                 </div>
-            </div>`
-            document.getElementById('afterTomorrow').innerHTML=afterTomorrowForecast;
-
-
+            </div>`;
+  document.getElementById("afterTomorrow").innerHTML = afterTomorrowForecast;
 }
-
-
