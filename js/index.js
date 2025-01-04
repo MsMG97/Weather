@@ -10,7 +10,7 @@ searchInput.addEventListener("input", () => {
 });
 async function search(city) {
   let response = await fetch(
-    `http://api.weatherapi.com/v1/forecast.json?key=e6f328a89a83405aaed84911241712&q=${city}&days=3`
+    `https://api.weatherapi.com/v1/forecast.json?key=e6f328a89a83405aaed84911241712&q=${city}&days=3`
   );
   if (response.status != 400 && response.ok) {
     // console.log(response);
